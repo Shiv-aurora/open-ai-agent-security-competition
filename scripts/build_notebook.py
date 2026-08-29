@@ -24,7 +24,7 @@ def main() -> None:
             "cell_type": "markdown",
             "metadata": {},
             "source": [
-                "# JED High Yield Attack v1\n",
+                "# JED Attack v3\n",
                 "\n",
                 "Writes `attack.py` then starts the competition inference server. "
                 "On a normal commit it only emits a placeholder `submission.csv`; "

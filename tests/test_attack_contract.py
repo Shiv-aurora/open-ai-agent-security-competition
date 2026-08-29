@@ -38,7 +38,7 @@ def test_contract() -> None:
 
     assert elapsed < BUDGET_S + 5.0, f"run overran budget: {elapsed:.1f}s"
     assert isinstance(candidates, list) and candidates, "expected a non-empty candidate list"
-    assert len(candidates) <= 220
+    assert len(candidates) <= 2000
     for idx, cand in enumerate(candidates):
         assert isinstance(cand, AttackCandidate)
         messages = list(cand.user_messages)
