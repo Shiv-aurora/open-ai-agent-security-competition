@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import base64
 import json
+import re
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -13,18 +14,24 @@ NOTEBOOK_PATH = OUT_DIR / "submit.ipynb"
 NOTEBOOK_COPY = ROOT / "notebooks" / "submit.ipynb"
 
 
+def _version() -> str:
+    m = re.search(r'^VERSION = "([^"]+)"', ATTACK_PATH.read_text(), re.M)
+    return m.group(1) if m else "v11"
+
+
 def main() -> None:
     source = ATTACK_PATH.read_bytes()
     b64 = base64.b64encode(source).decode("ascii")
-    # Keep lines short enough for the notebook editor.
     wrapped = "\n".join(b64[i : i + 80] for i in range(0, len(b64), 80))
+    ver = _version()
+    title = f"JED Attack {ver.upper()}"
 
     cells = [
         {
             "cell_type": "markdown",
             "metadata": {},
             "source": [
-                "# JED Attack V5\n",
+                f"# {title}\n",
                 "\n",
                 "Writes `attack.py` then starts the competition inference server. "
                 "On a normal commit it only emits a placeholder `submission.csv`; "

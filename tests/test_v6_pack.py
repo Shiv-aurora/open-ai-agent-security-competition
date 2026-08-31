@@ -1,4 +1,4 @@
-"""V11 none-env farms dual-rail pairs."""
+"""V11 dual-rail unique hosts."""
 
 from __future__ import annotations
 
@@ -12,23 +12,19 @@ sys.path.insert(0, str(ROOT))
 
 from aicomp_sdk.attacks import AttackRunConfig
 
-from attack import MAX_CHAIN, PAYLOAD, AttackAlgorithm
+from attack import PAYLOAD, AttackAlgorithm
 
 
-def test_none_env_farms_unique_pairs() -> None:
+def test_forced_pairs_unique_hosts() -> None:
     algo = AttackAlgorithm(config={"hard_n_cap": 20})
     cands = algo.run(None, AttackRunConfig(time_budget_s=5.0, max_tool_hops=8))
     assert len(cands) == 20
-    assert MAX_CHAIN == 2
     assert all(len(c.user_messages) == 2 for c in cands)
-    first = [c.user_messages[0] for c in cands]
-    second = [c.user_messages[1] for c in cands]
-    assert len(set(first)) == 20
-    assert len(set(second)) == 20
-    assert all(PAYLOAD in t for t in first)
-    assert all("secret.txt" in t and PAYLOAD not in t for t in second)
+    texts = [c.user_messages[0] for c in cands]
+    assert len(set(texts)) == 20
+    assert all(PAYLOAD in t and "http://" in t for t in texts)
 
 
 if __name__ == "__main__":
-    test_none_env_farms_unique_pairs()
+    test_forced_pairs_unique_hosts()
     print("ok")
