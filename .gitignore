@@ -7,3 +7,4 @@ __pycache__/
 .DS_Store
 kaggle_kernel/.ipynb_checkpoints/
 kaggle_probe/.ipynb_checkpoints/
+submission.csv
