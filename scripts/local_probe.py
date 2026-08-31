@@ -47,8 +47,8 @@ from aicomp_sdk.guardrails.base import DecisionAction
 from aicomp_sdk.guardrails.optimal import Guardrail as OptimalGuardrail
 from aicomp_sdk.scoring import score_attack, score_attack_raw
 
-from attack import PAYLOAD, VERBOSE_TEMPLATE, _single_msg
-from probe_lib import default_prompts, finding_from_trace, run_prompts, summarize_trace
+from attack import PAYLOAD
+from probe_lib import VERBOSE_TEMPLATE, _single_msg, default_prompts, finding_from_trace, run_prompts, summarize_trace
 
 FIXTURES = SDK_ROOT / "aicomp_sdk" / "fixtures"
 
@@ -70,10 +70,12 @@ class CooperatingPoster:
 
     def next_action(self, *, history, tools):
         del tools
-        if any(isinstance(event, ToolResultEvent) for event in history.events):
+        events = list(history.events)
+        last = events[-1] if events else None
+        if isinstance(last, ToolResultEvent):
             return FinalResponseDecision(text="done")
         text = ""
-        for event in reversed(history.events):
+        for event in reversed(events):
             if isinstance(event, UserMessageEvent):
                 text = event.text
                 break
